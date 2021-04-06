@@ -1,43 +1,44 @@
 package application;
 
-import java.text.ParseException;
 import java.util.Locale;
 import java.util.Scanner;
 
-import model.entities.Account;
-import model.exceptions.DomainException;
+import entities.Account;
+import exceptions.BusinessException;
 
 public class Program {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) {
 		
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
-		
-		System.out.println("Enter account data");
-		System.out.print("Number: ");
+
+		System.out.println("Informe os dados da conta");
+		System.out.print("Numero: ");
 		int number = sc.nextInt();
-		System.out.print("Holder: ");
+		System.out.print("Titular: ");
 		sc.nextLine();
 		String holder = sc.nextLine();
-		System.out.print("Initial balance: ");
+		System.out.print("Saldo inicial: ");
 		double balance = sc.nextDouble();
-		System.out.print("Withdraw limit: ");
+		System.out.print("Limite de saque: ");
 		double withdrawLimit = sc.nextDouble();
-		
+
 		Account acc = new Account(number, holder, balance, withdrawLimit);
 		
 		System.out.println();
-		System.out.print("Enter amount for withdraw: ");
+		System.out.print("Informe uma quantia para sacar: ");
 		double amount = sc.nextDouble();
+		
 		try {
 			acc.withdraw(amount);
-			System.out.println("New balance: " + String.format("%.2f", acc.getBalance()));
+			System.out.printf("Novo saldo: %.2f%n", acc.getBalance());
 		}
-		catch (DomainException e) {
-			System.out.println("Withdraw error: " + e.getMessage());
+		catch (BusinessException e) {
+			System.out.println(e.getMessage());
 		}
 		
 		sc.close();
 	}
+
 }

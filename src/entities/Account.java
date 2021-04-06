@@ -1,6 +1,6 @@
-package model.entities;
+package entities;
 
-import model.exceptions.DomainException;
+import exceptions.BusinessException;
 
 public class Account {
 
@@ -9,6 +9,9 @@ public class Account {
 	private Double balance;
 	private Double withdrawLimit;
 	
+	public Account() {
+	}
+
 	public Account(Integer number, String holder, Double balance, Double withdrawLimit) {
 		this.number = number;
 		this.holder = holder;
@@ -18,6 +21,10 @@ public class Account {
 
 	public Integer getNumber() {
 		return number;
+	}
+
+	public void setNumber(Integer number) {
+		this.number = number;
 	}
 
 	public String getHolder() {
@@ -30,6 +37,10 @@ public class Account {
 
 	public Double getBalance() {
 		return balance;
+	}
+
+	public void setBalance(Double balance) {
+		this.balance = balance;
 	}
 
 	public Double getWithdrawLimit() {
@@ -45,12 +56,16 @@ public class Account {
 	}
 	
 	public void withdraw(double amount) {
-		if (amount > withdrawLimit) {
-			throw new DomainException("The amount exceeds withdraw limit");
-		}
-		if (amount > balance) {
-			throw new DomainException("Not enough balance");
-		}
+		validateWithdraw(amount);
 		balance -= amount;
+	}
+	
+	private void validateWithdraw(double amount) {
+		if (amount > getWithdrawLimit()) {
+			throw new BusinessException("Erro de saque: A quantia excede o limite de saque");
+		} 
+		if (amount > getBalance()) {
+			throw new BusinessException("Erro de saque: Saldo insuficiente");
+		}
 	}
 }
